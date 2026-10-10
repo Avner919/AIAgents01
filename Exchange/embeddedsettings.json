@@ -1,0 +1,32 @@
+{
+  "Nats": {
+    "UserName": "business1",
+    "ClusterId": "stan-eas",
+    "Password": "ZX17eK4B5qJ0P2lGBga5rr",
+    "Port": 4222,
+    "Host": "127.0.0.1"
+  },
+  "Heartbeat": {
+    "Interval": 10,
+    "Subject": "{0}.test-espp.Heartbeat"
+  },
+  "Logs": {
+    "Subject": "test-cart.log"
+  },
+  "ConfigurationOptions": {
+    "Subjects": [
+      "test-cart.config"
+    ]
+  },
+  "Exchange": {
+    "Agent": {
+      "Login": "KONTR",
+      "Password": "POSTMASTR",
+      "Timeout": "7200000"
+    }
+  },
+  "StimulsoftKey": "",
+  "GisPaSettings": {
+    "Token": ""
+  }
+}
