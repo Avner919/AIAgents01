@@ -6,17 +6,17 @@
     public class AgentOptions
     {
         /// <summary>
-        ///     Таймаут для обмена с ГП.
+        ///     Таймаут для обмена со шлюзом.
         /// </summary>
         public int Timeout { get; set; }
 
         /// <summary>
-        ///     Логин для запуска утилиты обмена с ГП.
+        ///     Логин для запуска утилиты обмена со шлюзом.
         /// </summary>
         public string Login { get; set; }
 
         /// <summary>
-        ///     Пароль для запуска утилиты обмена с ГП.
+        ///     Пароль для запуска утилиты обмена со шлюзом.
         /// </summary>
         public string Password { get; set; }
     }

@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <ProjectReference Include="../Exchange/Exchange.csproj" />
+  </ItemGroup>
+  <!-- Stage the real executable without deployment settings or credentials. -->
+  <Target Name="CopyExchangeApplication" AfterTargets="Build">
+    <ItemGroup>
+      <ExchangeApplicationFiles Include="$(MSBuildProjectDirectory)/../Exchange/bin/$(Configuration)/net8.0/*.dll;$(MSBuildProjectDirectory)/../Exchange/bin/$(Configuration)/net8.0/Exchange.deps.json;$(MSBuildProjectDirectory)/../Exchange/bin/$(Configuration)/net8.0/Exchange.runtimeconfig.json" />
+    </ItemGroup>
+    <Copy SourceFiles="@(ExchangeApplicationFiles)" DestinationFolder="$(OutDir)ExchangeApp" SkipUnchangedFiles="true" />
+  </Target>
+</Project>

@@ -1,0 +1,20 @@
+# Project settings for C:\Projects\GitHub\AIAgents01.
+# Command-level allow / ask / deny rules live in rules/permissions.rules;
+# Codex discovers that file automatically when this project layer is trusted.
+# Allow: dotnet test, dotnet format, git commit.
+# Ask: git push (approval is reviewed by the user).
+# Deny: common file/directory rename and move commands.
+# Prefix rules are command controls, not a filesystem-wide rename prohibition.
+
+approval_policy = "on-request"
+approvals_reviewer = "user"
+sandbox_mode = "workspace-write"
+
+[[hooks.PostToolUse]]
+matcher = "^(apply_patch|Edit|Write)$"
+
+[[hooks.PostToolUse.hooks]]
+type = "command"
+command = 'py -3.12 "C:/Projects/GitHub/AIAgents01/.codex/hooks/format_after_edit.py"'
+timeout = 150
+statusMessage = "Formatting edited C# files"

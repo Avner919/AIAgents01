@@ -18,9 +18,9 @@ namespace Exchange
 
         // Событие, инициирующее закрытие ElpClient
         private const string CloseExchangeEventName = "CloseExchng";
-        // Событие, инициирующее в ElpClient запуск обмена с ГП
+        // Событие, инициирующее в ElpClient запуск обмена со шлюзом
         private const string OneTimeExchangeEventName = "OneTimeExchng";
-        // Событие, сообщающее о завершении обмена с ГП в ElpClient
+        // Событие, сообщающее о завершении обмена со шлюзом в ElpClient
         private const string ExchangeEndEventName = "ExchngEnd";
         // Событие, сообщающее о завершении запуска ElpClient
         private const string LoadEndEventName = "LoadEnd";
@@ -37,7 +37,7 @@ namespace Exchange
                 // Регистрируем обработчики событий
                 RegisterEventHandlers();
 
-                // Получаем существующий или инициализируем новый процесс обмена с ГП.
+                // Получаем существующий или инициализируем новый процесс обмена со шлюзом.
                 StartElpClient();
 
                 // Создаем обработчик события завершения обмена из агента обмена.
@@ -50,7 +50,7 @@ namespace Exchange
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Произошла ошибка при обмене файлами с ГП. Ошибка вызвавшая исключение: ");
+                logger.Error(ex, "Произошла ошибка при обмене файлами со шлюзом. Ошибка вызвавшая исключение: ");
 
                 throw new InvalidOperationException(ex.Message, ex);
             }
@@ -124,25 +124,25 @@ namespace Exchange
         }
 
         /// <summary>
-        ///     Создаем обработчик события завершения обмена с ГП.
+        ///     Создаем обработчик события завершения обмена со шлюзом.
         /// </summary>
         private void CreateEventHandlerExchangeEnd()
         {
-            logger.Info("Получаем обработчик события завершения обмена с ГП.");
+            logger.Info("Получаем обработчик события завершения обмена со шлюзом.");
 
             _exchangeEventHandlers[ExchangeEndEventName] = OpenEventByName(ExchangeEndEventName)
-                                                        ?? throw new ArgumentException("3: Не удалось получить обработчик события завершения обмена с ГП.");
+                                                        ?? throw new ArgumentException("3: Не удалось получить обработчик события завершения обмена со шлюзом.");
         }
 
         /// <summary>
-        ///     Запуск обмена с ГП и ожидание его завершения в течение таймаута, заданного в настройках.
+        ///  Запуск обмена со шлюзом и ожидание его завершения в течение таймаута, заданного в настройках.
         /// </summary>
         private void StartExchangeAndWaitExchangeEnd()
         {
             logger.Info("Запускаем в ElpClient обмен с ГП.");
 
             // Сбрасываем событие завершения обмена, так как это событие может висеть
-            // в установленном состоянии с предыдущей попытки запуска обмена с ГП.
+            // в установленном состоянии с предыдущей попытки запуска обмена со шлюзом.
             _exchangeEventHandlers[ExchangeEndEventName].Reset();
 
             // Запуск обмена

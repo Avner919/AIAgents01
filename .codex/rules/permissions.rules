@@ -1,0 +1,55 @@
+# Loaded with this repository's trusted .codex configuration layer.
+# Run canonical commands from the repository root. Prefix matching does not
+# constrain cwd or inspect arbitrary scripts; see AGENTS.md for operation policy.
+
+# 1. ALLOW: run tests, format code, and create local commits.
+prefix_rule(
+    pattern = [["dotnet", "dotnet.exe"], "test"],
+    decision = "allow",
+    justification = "Running repository tests is allowed without prompting.",
+    match = ["dotnet test AIPractice1.slnx", "dotnet.exe test Tests/Exchange.Tests.csproj"],
+    not_match = ["dotnet run", "dotnet format AIPractice1.slnx"],
+)
+
+prefix_rule(
+    pattern = [["dotnet", "dotnet.exe"], "format"],
+    decision = "allow",
+    justification = "Formatting repository code is allowed without prompting.",
+    match = ["dotnet format AIPractice1.slnx", "dotnet.exe format AIPractice1.slnx --verify-no-changes"],
+    not_match = ["dotnet run"],
+)
+
+prefix_rule(
+    pattern = [["git", "git.exe"], "commit"],
+    decision = "allow",
+    justification = "Creating a local repository commit is allowed without prompting.",
+    match = ["git commit -m change", "git.exe commit --amend --no-edit"],
+    not_match = ["git push", "git mv old.cs new.cs"],
+)
+
+# 2. ASK: each push requires user approval, including dry-run and force variants.
+prefix_rule(
+    pattern = [["git", "git.exe"], "push"],
+    decision = "prompt",
+    justification = "Ask the user before publishing repository changes with git push.",
+    match = ["git push", "git push origin HEAD", "git.exe push --force-with-lease", "git push --dry-run"],
+    not_match = ["git commit -m change", "git fetch"],
+)
+
+# 3. DENY: git renames and common standalone rename/move commands.
+# Moves are also blocked because they can rename files or directories.
+prefix_rule(
+    pattern = [["git", "git.exe"], "mv"],
+    decision = "forbidden",
+    justification = "Renaming files or directories is prohibited in this repository; edit existing paths instead.",
+    match = ["git mv old.cs new.cs", "git.exe mv old-directory new-directory"],
+    not_match = ["git status", "git commit -m change"],
+)
+
+prefix_rule(
+    pattern = [["Rename-Item", "rename-item", "RENAME-ITEM", "rni", "RNI", "ren", "REN", "rename", "RENAME", "rename.exe", "Move-Item", "move-item", "MOVE-ITEM", "mi", "MI", "mv", "MV", "mv.exe", "move", "MOVE", "move.exe"]],
+    decision = "forbidden",
+    justification = "File and directory rename/move commands are prohibited; edit existing paths instead.",
+    match = ["Rename-Item old.cs new.cs", "rni old-directory new-directory", "ren old.cs new.cs", "mv old-directory new-directory", "Move-Item old.cs new.cs"],
+    not_match = ["Get-Content old.cs", "git status"],
+)

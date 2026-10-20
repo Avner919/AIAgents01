@@ -5,10 +5,9 @@ using NLog;
 using NLog.Web;
 using Exchange.Options;
 
-
 namespace Exchange
 {
-    public class Program
+    public static class Program
     {
         private const string LogMessage = "В утилите 'Russian.Post.Espp.Exchange' возникла ошибка: ";
 
