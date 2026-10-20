@@ -12,7 +12,7 @@ namespace Exchange
     public class ExchangeProcess(Logger logger, ExchangeOptions exchangeOptions)
     {
         // Имя процесса
-        private const string ExchangeProcessName = "exchange";
+        private const string ExchangeProcessName = "ExchangeClient";
         // Имя файла 
         private const string ExchangeProcessFileName = ExchangeProcessName + ".exe";
 
@@ -33,7 +33,7 @@ namespace Exchange
         {
             try
             {
-                logger.Info("Начинаем обмен с ГП");
+                logger.Info("Начинаем обмен со шлюзом");
 
                 // Регистрируем обработчики событий
                 RegisterEventHandlers();
@@ -95,7 +95,7 @@ namespace Exchange
 
             logger.Info("Создаем процесс");
 
-            var elpClientProcess = new Process
+            var clientProcess = new Process
             {
                 StartInfo = new ProcessStartInfo
                 {
@@ -105,7 +105,7 @@ namespace Exchange
                 }
             };
 
-            elpClientProcess.Start();
+            clientProcess.Start();
 
             logger.Info("Создали и запустили процесс.");
 
@@ -167,12 +167,12 @@ namespace Exchange
         /// </summary>
         private void StopClients()
         {
-            var elpClientProcesses = Process.GetProcesses()
+            var clientProcesses = Process.GetProcesses()
                                             .Where(p => string.Equals(p.ProcessName, ExchangeProcessName,
                                                                       StringComparison.InvariantCultureIgnoreCase))
                                             .ToArray();
 
-            foreach (var process in elpClientProcesses)
+            foreach (var process in clientProcesses)
             {
                 logger.Info($"Останавливаем процесс с ИД '{process.Id}'.");
 

@@ -36,14 +36,14 @@ The xUnit test launches the actual executable with invalid configuration in an i
 - Automatic capture depends on the enabled plugin's lifecycle hooks being loaded and trusted in the active Codex session. Manual memory search and saving do not prove automatic capture is running.
 
 ## Runtime and configuration
-- Actual exchange requires Windows, the external `m_exchng.exe` client in `Exchange:AgentCatalog`, and configured input/output directories.
+- Actual exchange requires Windows, the external `ExchangeClient.exe` client in `Exchange:AgentCatalog`, and configured input/output directories.
 - Configuration loads in this order: `embeddedsettings.json`, `appsettings.json`, environment variables. Later values override earlier values. Environment variable keys use double underscores, for example `Exchange__Agent__Timeout`.
 - `appsettings.Development.json` is not loaded by the current entry point. Do not assume setting a development environment activates it.
 - Both loaded JSON files and `exchangeNlog.config` are copied to the build output. Run from that output directory because the entry point uses relative configuration paths.
 - `Exchange:Agent:Timeout` is in milliseconds. Keep option names aligned with the JSON section and model properties.
 - Treat credentials and tokens in settings as sensitive; do not repeat their values in documentation, logs, tests, or reports. Use environment overrides for local credentials.
 - NLog is configured by `Exchange/exchangeNlog.config`, with a Windows log directory under ProgramData. Validate logging configuration when changing NLog or its package versions.
-- Only run the utility in an explicitly authorized exchange environment: startup and cleanup call `StopElpClients()`, which kills all processes named `m_exchng`. Execution also initiates real exchange and can wait for the configured timeout.
+- Only run the utility in an explicitly authorized exchange environment: startup and cleanup call `StopClients()`, which kills all processes named `ExchangeClient`. Execution also initiates real exchange and can wait for the configured timeout.
 
 ## Editing conventions
 - Match the surrounding C# style: four-space indentation, Allman braces, block-scoped namespaces, PascalCase types/methods/properties, and camelCase parameters/locals. Keep established Russian comments and user-facing log messages consistent.

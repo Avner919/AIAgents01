@@ -11,18 +11,18 @@
     "Subject": "{0}.test-espp.Heartbeat"
   },
   "Logs": {
-    "Subject": "test-cart.log"
+    "Subject": "test.log"
   },
   "ConfigurationOptions": {
     "Subjects": [
-      "test-cart.config"
+      "test.config"
     ]
   },
   "Exchange": {
     "Agent": {
       "Login": "KONTR",
       "Password": "POSTMASTR",
-      "Timeout": "7200000"
+      "Timeout": "1000"
     }
   },
   "StimulsoftKey": "",
