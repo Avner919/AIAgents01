@@ -9,7 +9,7 @@ namespace Exchange
 {
     public static class Program
     {
-        private const string LogMessage = "В утилите 'Russian.Post.Espp.Exchange' возникла ошибка: ";
+        private const string LogMessage = "В 'Exchange' возникла ошибка: ";
 
         private static int Main()
         {

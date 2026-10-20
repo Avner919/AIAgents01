@@ -1,7 +1,7 @@
 ﻿namespace Exchange.Options
 {
     /// <summary>
-    ///     Модель настроек обмена с ГП из файла конфигурации.
+    ///     Модель настроек обмена со шлюзом из файла конфигурации.
     /// </summary>
     public class AgentOptions
     {

@@ -27,6 +27,14 @@ The xUnit test launches the actual executable with invalid configuration in an i
 - Automatically use `.agents/skills/run-and-fix-tests/SKILL.md` after code changes or when repairing failing tests, before reporting the task complete. This is an agent procedure during an active task, not a background monitor. During a review-only task, report failures without making repairs.
 - Use `.agents/skills/review-pull-request/SKILL.md` only when the user explicitly requests a pull-request review, for example `$review-pull-request` followed by a PR URL or number.
 
+## Project memory (claude-mem)
+- Use the installed `claude-mem` plugin with project name `AIAgents01` for this checkout.
+- At the start of a task, search relevant prior decisions with `mem_search` using `project="AIAgents01"`. If startup memory context is absent, request `session_start_context` for the same project.
+- Use the installed `claude-mem:mem-search` skill for progressive disclosure. Search before saving a note to avoid duplicates.
+- Save concise, verified decisions, resolved problems, and useful handoff facts with `save_memory` using `project="AIAgents01"`. Do not store credentials, tokens, settings values, or whole transcripts.
+- Treat retrieved memories as historical evidence. Current user instructions, repository guidance, and checked source files take precedence.
+- Automatic capture depends on the enabled plugin's lifecycle hooks being loaded and trusted in the active Codex session. Manual memory search and saving do not prove automatic capture is running.
+
 ## Runtime and configuration
 - Actual exchange requires Windows, the external `m_exchng.exe` client in `Exchange:AgentCatalog`, and configured input/output directories.
 - Configuration loads in this order: `embeddedsettings.json`, `appsettings.json`, environment variables. Later values override earlier values. Environment variable keys use double underscores, for example `Exchange__Agent__Timeout`.

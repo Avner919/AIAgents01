@@ -11,21 +11,22 @@ namespace Exchange
 {
     public class ExchangeProcess(Logger logger, ExchangeOptions exchangeOptions)
     {
-        // Имя процесса ElpClient
-        private const string ExchangeProcessName = "m_exchng";
-        // Имя файла ElpClient
+        // Имя процесса
+        private const string ExchangeProcessName = "exchange";
+        // Имя файла 
         private const string ExchangeProcessFileName = ExchangeProcessName + ".exe";
 
-        // Событие, инициирующее закрытие ElpClient
+        // Событие, инициирующее закрытие 
         private const string CloseExchangeEventName = "CloseExchng";
-        // Событие, инициирующее в ElpClient запуск обмена со шлюзом
+        // Событие, инициирующее запуск обмена со шлюзом
         private const string OneTimeExchangeEventName = "OneTimeExchng";
-        // Событие, сообщающее о завершении обмена со шлюзом в ElpClient
+        // Событие, сообщающее о завершении обмена со шлюзом
         private const string ExchangeEndEventName = "ExchngEnd";
-        // Событие, сообщающее о завершении запуска ElpClient
+        // Событие, сообщающее о завершении запуска процесса
+        
         private const string LoadEndEventName = "LoadEnd";
 
-        // Обработчики событий ElpClient
+        // Обработчики событий процесса
         private IDictionary<string, EventWaitHandle> _exchangeEventHandlers;
 
         public void StartExchangeProcess()
@@ -38,7 +39,7 @@ namespace Exchange
                 RegisterEventHandlers();
 
                 // Получаем существующий или инициализируем новый процесс обмена со шлюзом.
-                StartElpClient();
+                StartClient();
 
                 // Создаем обработчик события завершения обмена из агента обмена.
                 CreateEventHandlerExchangeEnd();
@@ -58,12 +59,12 @@ namespace Exchange
             {
                 CloseEventHandlers();
 
-                StopElpClients();
+                StopClients();
             }
         }
 
         /// <summary>
-        ///     Создаем обработчики событий ElpClient.
+        ///     Создаем обработчики событий процесса.
         /// </summary>
         private void RegisterEventHandlers()
         {
@@ -79,11 +80,11 @@ namespace Exchange
         }
 
         /// <summary>
-        ///     Запуск процесса ElpClient
+        ///     Запуск процесса
         /// </summary>
-        private void StartElpClient()
+        private void StartClient()
         {
-            StopElpClients();
+            StopClients();
 
             //Получаем полный путь до утилиты
             var processPath = Path.Combine(exchangeOptions.AgentCatalog, ExchangeProcessFileName);
@@ -92,7 +93,7 @@ namespace Exchange
                 throw new FileNotFoundException($"1: Утилита обмена {ExchangeProcessFileName} не найдена в каталоге {exchangeOptions.AgentCatalog}.");
             }
 
-            logger.Info("Создаем процесс ElpClient");
+            logger.Info("Создаем процесс");
 
             var elpClientProcess = new Process
             {
@@ -106,9 +107,9 @@ namespace Exchange
 
             elpClientProcess.Start();
 
-            logger.Info("Создали и запустили процесс ElpClient.");
+            logger.Info("Создали и запустили процесс.");
 
-            logger.Info($"Ожидаем завершения процедуры запуска ElpClient {exchangeOptions.Agent.Timeout / 1000} секунд.");
+            logger.Info($"Ожидаем завершения процедуры запуска процесса {exchangeOptions.Agent.Timeout / 1000} секунд.");
 
             //Ожидаем в основном потоке запуска утилиты обмена (ожидание указано в файле конфигурации)
             if (_exchangeEventHandlers[LoadEndEventName].WaitOne(exchangeOptions.Agent.Timeout))
@@ -117,10 +118,10 @@ namespace Exchange
             }
             else
             {
-                throw new TimeoutException("2: ElpClient не сообщил о завершении своего запуска.");
+                throw new TimeoutException("2: Процесс не сообщил о завершении своего запуска.");
             }
 
-            logger.Info("Процесс ElpClient успешно запущен.");
+            logger.Info("Процесс успешно запущен.");
         }
 
         /// <summary>
@@ -139,7 +140,7 @@ namespace Exchange
         /// </summary>
         private void StartExchangeAndWaitExchangeEnd()
         {
-            logger.Info("Запускаем в ElpClient обмен с ГП.");
+            logger.Info("Запускаем обмен со шлюзом .");
 
             // Сбрасываем событие завершения обмена, так как это событие может висеть
             // в установленном состоянии с предыдущей попытки запуска обмена со шлюзом.
@@ -153,18 +154,18 @@ namespace Exchange
             {
                 _exchangeEventHandlers[ExchangeEndEventName].Reset();
 
-                logger.Info("Обмен с ГП в ElpClient успешно завершен.");
+                logger.Info("Обмен со шлюзом успешно завершен.");
             }
             else
             {
-                throw new TimeoutException("4: ElpClient не сообщил о завершении обмена с ГП.");
+                throw new TimeoutException("4: Процесс не сообщил о завершении обмена со шлюзом.");
             }
         }
 
         /// <summary>
-        ///     Метод останавливает все обнаруженные процессы ElpClient
+        ///     Метод останавливает все обнаруженные процессы 
         /// </summary>
-        private void StopElpClients()
+        private void StopClients()
         {
             var elpClientProcesses = Process.GetProcesses()
                                             .Where(p => string.Equals(p.ProcessName, ExchangeProcessName,
@@ -173,7 +174,7 @@ namespace Exchange
 
             foreach (var process in elpClientProcesses)
             {
-                logger.Info($"Останавливаем процесс ElpClient с ИД '{process.Id}'.");
+                logger.Info($"Останавливаем процесс с ИД '{process.Id}'.");
 
                 process.Kill();
             }

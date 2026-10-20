@@ -80,3 +80,5 @@ codex execpolicy check --rules .codex/rules/permissions.rules --pretty -- git pu
 ```
 
 Ожидаемое решение проверяющего инструмента — `prompt`.
+# Screenshots
+![img.png](img.png)
