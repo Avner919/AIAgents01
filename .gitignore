@@ -10,6 +10,9 @@
 *.userosscache
 *.sln.docstates
 *.env
+# Local secret variants; keep only the blank example in Git.
+.env.*
+!.env.example
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs

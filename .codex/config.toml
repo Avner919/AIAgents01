@@ -10,6 +10,15 @@ approval_policy = "on-request"
 approvals_reviewer = "user"
 sandbox_mode = "workspace-write"
 
+[[hooks.PreToolUse]]
+matcher = ".*"
+
+[[hooks.PreToolUse.hooks]]
+type = "command"
+command = 'python "C:/Projects/GitHub/AIAgents01/.codex/hooks/protect_files.py"'
+timeout = 10
+statusMessage = "Checking protected secret files"
+
 [[hooks.PostToolUse]]
 matcher = "^(apply_patch|Edit|Write)$"
 
