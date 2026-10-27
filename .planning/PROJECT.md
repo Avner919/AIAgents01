@@ -30,6 +30,10 @@ Existing capabilities inferred from checked source and `.planning/codebase/`; th
 - [ ] Inform the caller of all defaults applied when the executable field is blank, including the effective client executable selection.
 - [ ] Retain default values in class `ExchangeProcess`; avoid separately maintained copies in the API.
 - [ ] Add focused automated coverage for authentication, override/default selection, and immediate launch responses using isolated substitutes.
+- [ ] Allow overlapping launch requests without rejecting or queueing solely because another exchange is running.
+- [ ] Report the effective client filename, full executable path, client working directory, input/output directories, and timeout in milliseconds when blank input selects defaults.
+
+The approved v1 requirements and acceptance criteria are tracked in `.planning/REQUIREMENTS.md`.
 
 ### Out of Scope
 
@@ -74,6 +78,8 @@ Existing capabilities inferred from checked source and `.planning/codebase/`; th
 | Report applied defaults to the caller | Caller must know what will be used when leaving the field blank | — Pending implementation |
 | Return immediately with the utility process ID | User selected launch acknowledgement rather than waiting for completion | — Pending implementation |
 | Protect the endpoint with an API key | User selected API-key authentication | — Pending implementation |
+| Allow overlapping launches | User explicitly approved overlap instead of rejecting a second request | — Pending implementation |
+| Return the agreed non-secret default inventory | User confirmed filename, full path, working directory, input/output directories, and millisecond timeout | — Pending implementation |
 
 ## Evolution
 
@@ -93,4 +99,4 @@ After each milestone:
 4. Update Context with current implementation and verified behavior.
 
 ---
-*Last updated: 2026-10-27 after project initialization and user scope confirmation*
+*Last updated: 2026-10-27 after user approval of v1 requirements*
