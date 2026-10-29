@@ -96,30 +96,31 @@ No additional requirements are committed for a later release. Completion trackin
 
 ## Traceability
 
-Phase assignments will be filled during roadmap creation. All requirements currently have status Pending.
+All 14 v1 requirements are assigned to exactly one roadmap phase. All requirements currently have status Pending.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| API-01 | Unassigned | Pending |
-| AUTH-01 | Unassigned | Pending |
-| AUTH-02 | Unassigned | Pending |
-| EXEC-01 | Unassigned | Pending |
-| EXEC-02 | Unassigned | Pending |
-| EXEC-03 | Unassigned | Pending |
-| EXEC-04 | Unassigned | Pending |
-| EXEC-05 | Unassigned | Pending |
-| DEF-01 | Unassigned | Pending |
-| DEF-02 | Unassigned | Pending |
-| ERR-01 | Unassigned | Pending |
-| COMP-01 | Unassigned | Pending |
-| TEST-01 | Unassigned | Pending |
-| DOC-01 | Unassigned | Pending |
+| API-01 | Phase 1 | Pending |
+| AUTH-01 | Phase 1 | Pending |
+| AUTH-02 | Phase 1 | Pending |
+| EXEC-01 | Phase 1 | Pending |
+| EXEC-02 | Phase 2 | Pending |
+| EXEC-03 | Phase 1 | Pending |
+| EXEC-04 | Phase 1 | Pending |
+| EXEC-05 | Phase 1 | Pending |
+| DEF-01 | Phase 1 | Pending |
+| DEF-02 | Phase 1 | Pending |
+| ERR-01 | Phase 1 | Pending |
+| COMP-01 | Phase 2 | Pending |
+| TEST-01 | Phase 2 | Pending |
+| DOC-01 | Phase 2 | Pending |
 
 **Coverage:**
 - v1 requirements: 14 total
-- Mapped to phases: 0
-- Unmapped: 14 — awaiting roadmap creation
+- Mapped to phases: 14
+- Unmapped: 0
+- Duplicate phase assignments: 0
 
 ---
 *Requirements defined: 2026-10-27*
-*Last updated: 2026-10-27 after user approval of v1 requirements*
+*Last updated: 2026-10-29 after approval of revised roadmap mappings; v1 requirements unchanged*

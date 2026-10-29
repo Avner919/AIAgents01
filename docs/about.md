@@ -24,12 +24,22 @@
 - [run-and-fix-tests](../.agents/skills/run-and-fix-tests/SKILL.md) — автоматически запускает все тесты после изменений кода, устраняет причины падений в рамках задачи и повторно проверяет решение.
 - [review-pull-request](../.agents/skills/review-pull-request/SKILL.md) — по явному запросу пользователя (`$review-pull-request` с URL или номером PR) проверяет pull request на ошибки, регрессии и пробелы в тестах, возвращая замечания в чат.
 
-# Screenshots
+# HomeWork #3
 
 1) Rename failure
 
-![image-20261027102722069](C:\Projects\GitHub\AIAgents01\Docs\img2.png)
+![image-20261027102722069](C:\Projects\GitHub\AIAgents01\Docs\Screenshots\img2.png)
 
 2. Session 2. Claude-mem up and running
 
-![image-20261027103822022](C:\Projects\GitHub\AIAgents01\docs\img1.png)
+![image-20261027103822022](C:\Projects\GitHub\AIAgents01\docs\Screenshots\img1.png)
+
+# HomeWork #6
+
+Before compact
+
+![](C:\Projects\GitHub\AIAgents01\docs\Screenshots\context_status.png)
+
+After compact
+
+![](C:\Projects\GitHub\AIAgents01\docs\Screenshots\context_status_compacted.png)
