@@ -24,9 +24,9 @@ The Exchange Admin API milestone delivers two usable vertical slices: an API-key
   4. Successful default-launch responses contain the utility PID and effective client filename, full executable path, client working directory, input/output directories, and timeout in milliseconds, without credentials or API keys. The response can complete while the utility is still running; the PID acknowledges process creation only.
   5. Two valid overlapping default-launch requests can each receive an immediate utility PID without rejection, queueing, or serialization solely because another exchange is running. Invalid executable paths applicable to this slice and immediate process-start failures return useful errors without secrets or successful PID responses. Admission does not promise independent concurrent external exchanges.
 
-**Plans:** 0/3 plans executed
+**Plans:** 1/3 plans executed
 **Wave 1**
-- [ ] 01-01-PLAN.md
+- [x] 01-01-PLAN.md
 
 **Wave 2** *(blocked on Wave 1 completion)*
 - [ ] 01-02-PLAN.md
@@ -67,7 +67,7 @@ Execution order: Phase 1 → Phase 2. Plans within a phase may run in parallel o
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Authenticated Default Launch | 0/3 | Planned     | - |
+| 1. Authenticated Default Launch | 1/3 | In Progress | - |
 | 2. Explicit Client Selection and Compatibility | 0/TBD | Not started | - |
 
 ---
