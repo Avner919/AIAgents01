@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System;
 using System.Linq;
+
 using NLog;
+
 using Exchange.Options;
 
 namespace Exchange
@@ -16,6 +18,40 @@ namespace Exchange
         // Имя файла 
         private const string ExchangeProcessFileName = ExchangeProcessName + ".exe";
 
+        private readonly ResolvedExchangeSettings _settings = ResolveDefaults(exchangeOptions, Environment.CurrentDirectory);
+
+        public static ResolvedExchangeSettings ResolveDefaults(ExchangeOptions options, string utilityDirectory)
+        {
+            ArgumentNullException.ThrowIfNull(options);
+            if (options.Agent == null || string.IsNullOrWhiteSpace(options.AgentCatalog)
+                || string.IsNullOrWhiteSpace(options.InFilePath) || string.IsNullOrWhiteSpace(options.OutFilePath)
+                || options.Agent.Login == null || options.Agent.Password == null || options.Agent.Timeout < -1)
+            {
+                throw new InvalidOperationException("Exchange configuration is invalid.");
+            }
+            var root = Path.GetFullPath(utilityDirectory);
+            var clientDirectory = Path.GetFullPath(options.AgentCatalog, root);
+            return new ResolvedExchangeSettings(ExchangeProcessFileName, Path.Combine(clientDirectory, ExchangeProcessFileName),
+                clientDirectory, Path.GetFullPath(options.InFilePath, root), Path.GetFullPath(options.OutFilePath, root),
+                options.Agent.Timeout, options.Agent.Login, options.Agent.Password);
+        }
+
+        public static ProcessStartInfo BuildClientStartInfo(ResolvedExchangeSettings settings)
+        {
+            ArgumentNullException.ThrowIfNull(settings);
+            var info = new ProcessStartInfo
+            {
+                FileName = settings.ClientExecutablePath,
+                WorkingDirectory = settings.ClientWorkingDirectory,
+                UseShellExecute = false
+            };
+            info.ArgumentList.Add(settings.Login);
+            info.ArgumentList.Add(settings.Password);
+            info.ArgumentList.Add(settings.InputDirectory);
+            info.ArgumentList.Add(settings.OutputDirectory);
+            return info;
+        }
+
         // Событие, инициирующее закрытие 
         private const string CloseExchangeEventName = "CloseExchng";
         // Событие, инициирующее запуск обмена со шлюзом
@@ -23,7 +59,7 @@ namespace Exchange
         // Событие, сообщающее о завершении обмена со шлюзом
         private const string ExchangeEndEventName = "ExchngEnd";
         // Событие, сообщающее о завершении запуска процесса
-        
+
         private const string LoadEndEventName = "LoadEnd";
 
         // Обработчики событий процесса
@@ -87,7 +123,7 @@ namespace Exchange
             StopClients();
 
             //Получаем полный путь до утилиты
-            var processPath = Path.Combine(exchangeOptions.AgentCatalog, ExchangeProcessFileName);
+            var processPath = _settings.ClientExecutablePath;
             if (!File.Exists(processPath))
             {
                 throw new FileNotFoundException($"1: Утилита обмена {ExchangeProcessFileName} не найдена в каталоге {exchangeOptions.AgentCatalog}.");
@@ -97,12 +133,7 @@ namespace Exchange
 
             var clientProcess = new Process
             {
-                StartInfo = new ProcessStartInfo
-                {
-                    FileName = processPath,
-                    WorkingDirectory = exchangeOptions.AgentCatalog,
-                    Arguments = $"{exchangeOptions.Agent.Login} {exchangeOptions.Agent.Password} {exchangeOptions.InFilePath} {exchangeOptions.OutFilePath}",
-                }
+                StartInfo = BuildClientStartInfo(_settings)
             };
 
             clientProcess.Start();
@@ -112,7 +143,7 @@ namespace Exchange
             logger.Info($"Ожидаем завершения процедуры запуска процесса {exchangeOptions.Agent.Timeout / 1000} секунд.");
 
             //Ожидаем в основном потоке запуска утилиты обмена (ожидание указано в файле конфигурации)
-            if (_exchangeEventHandlers[LoadEndEventName].WaitOne(exchangeOptions.Agent.Timeout))
+            if (_exchangeEventHandlers[LoadEndEventName].WaitOne(_settings.TimeoutMilliseconds))
             {
                 _exchangeEventHandlers[LoadEndEventName].Reset();
             }
@@ -150,7 +181,7 @@ namespace Exchange
             _exchangeEventHandlers[OneTimeExchangeEventName].Set();
 
             // Ожидание завершения обмена
-            if (_exchangeEventHandlers[ExchangeEndEventName].WaitOne(exchangeOptions.Agent.Timeout))
+            if (_exchangeEventHandlers[ExchangeEndEventName].WaitOne(_settings.TimeoutMilliseconds))
             {
                 _exchangeEventHandlers[ExchangeEndEventName].Reset();
 

@@ -1,9 +1,13 @@
-﻿using System;
+using System;
 using System.Text.RegularExpressions;
+
 using Microsoft.Extensions.Configuration;
+
 using NLog;
 using NLog.Web;
+
 using Exchange.Options;
+using Exchange.Configuration;
 
 namespace Exchange
 {
@@ -18,13 +22,8 @@ namespace Exchange
 
             try
             {
-                var config = new ConfigurationBuilder().AddJsonFile("embeddedsettings.json")
-                                                       .AddJsonFile("appsettings.json")
-                                                       .AddEnvironmentVariables()
-                                                       .Build();
-
-                var exchangeOptions = config.GetSection(ExchangeOptions.SectionName)
-                                            .Get<ExchangeOptions>();
+                var exchangeOptions = ExchangeConfigurationLoader.Load(Environment.CurrentDirectory,
+                    ExchangeConfigurationLoader.CaptureEnvironment());
 
                 var exchangeProcess = new ExchangeProcess(logger, exchangeOptions);
 

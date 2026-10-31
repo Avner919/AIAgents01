@@ -14,6 +14,10 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <ProjectReference Include="../Exchange/Exchange.csproj" />
+    <ProjectReference Include="../Exchange.Api/Exchange.Api.csproj" />
+    <ProjectReference Include="Fixtures/HarmlessUtility/HarmlessUtility.csproj" ReferenceOutputAssembly="false" />
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <Compile Remove="Fixtures/HarmlessUtility/**/*.cs" />
   </ItemGroup>
   <!-- Stage the real executable without deployment settings or credentials. -->
   <Target Name="CopyExchangeApplication" AfterTargets="Build">
@@ -21,5 +25,13 @@
       <ExchangeApplicationFiles Include="$(MSBuildProjectDirectory)/../Exchange/bin/$(Configuration)/net8.0/*.dll;$(MSBuildProjectDirectory)/../Exchange/bin/$(Configuration)/net8.0/Exchange.deps.json;$(MSBuildProjectDirectory)/../Exchange/bin/$(Configuration)/net8.0/Exchange.runtimeconfig.json" />
     </ItemGroup>
     <Copy SourceFiles="@(ExchangeApplicationFiles)" DestinationFolder="$(OutDir)ExchangeApp" SkipUnchangedFiles="true" />
+  </Target>
+  <Target Name="CopyTestApplications" AfterTargets="Build">
+    <ItemGroup>
+      <HarmlessFiles Include="$(MSBuildProjectDirectory)/Fixtures/HarmlessUtility/bin/$(Configuration)/net8.0/*.dll;$(MSBuildProjectDirectory)/Fixtures/HarmlessUtility/bin/$(Configuration)/net8.0/*.exe;$(MSBuildProjectDirectory)/Fixtures/HarmlessUtility/bin/$(Configuration)/net8.0/HarmlessUtility.deps.json;$(MSBuildProjectDirectory)/Fixtures/HarmlessUtility/bin/$(Configuration)/net8.0/HarmlessUtility.runtimeconfig.json" />
+      <ApiFiles Include="$(MSBuildProjectDirectory)/../Exchange.Api/bin/$(Configuration)/net8.0/*.dll;$(MSBuildProjectDirectory)/../Exchange.Api/bin/$(Configuration)/net8.0/*.exe;$(MSBuildProjectDirectory)/../Exchange.Api/bin/$(Configuration)/net8.0/Exchange.Api.deps.json;$(MSBuildProjectDirectory)/../Exchange.Api/bin/$(Configuration)/net8.0/Exchange.Api.runtimeconfig.json" />
+    </ItemGroup>
+    <Copy SourceFiles="@(HarmlessFiles)" DestinationFolder="$(OutDir)HarmlessUtility" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="@(ApiFiles)" DestinationFolder="$(OutDir)ApiApp" SkipUnchangedFiles="true" />
   </Target>
 </Project>

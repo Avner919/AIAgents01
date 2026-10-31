@@ -1,7 +1,7 @@
 using System.Diagnostics;
-using System.Reflection;
 
 using Exchange.Options;
+
 using Xunit;
 
 namespace Exchange.Tests
@@ -32,12 +32,8 @@ namespace Exchange.Tests
                 }
             };
 
-            // Reflection keeps RED executable before the new pure methods exist.
-            var resolver = typeof(ExchangeProcess).GetMethod("ResolveDefaults", BindingFlags.Public | BindingFlags.Static);
-            var builder = typeof(ExchangeProcess).GetMethod("BuildClientStartInfo", BindingFlags.Public | BindingFlags.Static);
-            Assert.True(resolver != null && builder != null, "The pure client start-info boundary must exist.");
-            var settings = resolver.Invoke(null, new object[] { options, utilityDirectory });
-            var startInfo = (ProcessStartInfo)builder.Invoke(null, new[] { settings })!;
+            var settings = ExchangeProcess.ResolveDefaults(options, utilityDirectory);
+            var startInfo = ExchangeProcess.BuildClientStartInfo(settings);
             var expectedArguments = new[]
             {
                 options.Agent.Login, options.Agent.Password,

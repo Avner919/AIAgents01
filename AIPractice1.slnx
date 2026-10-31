@@ -1,5 +1,7 @@
 <Solution>
   <Project Path="Exchange/Exchange.csproj" />
+  <Project Path="Exchange.Api/Exchange.Api.csproj" />
+  <Project Path="Tests/Fixtures/HarmlessUtility/HarmlessUtility.csproj" />
   <Folder Name="/Tests/">
     <Project Path="Tests/Exchange.Tests.csproj" />
   </Folder>
