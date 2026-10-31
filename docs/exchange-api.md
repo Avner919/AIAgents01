@@ -19,6 +19,8 @@ For a local console deployment, run from the published API folder:
 
 Stop the API with Ctrl+C. Configure HTTPS before sending API keys across a remote network. The process identity needs read/execute access to the utility/client, access to exchange folders, Windows events and the existing log location. Startup refuses a missing/blank server key, invalid utility target, or missing/invalid required utility configuration. Startup checks inspect configuration; they do not run exchange.
 
+Open `http://127.0.0.1:5080/` for Swagger UI. The launch profile opens this root URL automatically. Swagger is available in both Development and Production; its OpenAPI document is at `/swagger/v1/swagger.json`. Use **Authorize** to supply `X-Api-Key`; the configured key is never embedded in the UI or document. Opening documentation does not launch the utility. Executing the authenticated POST does initiate the configured utility.
+
 ## Default launch
 
 ```http

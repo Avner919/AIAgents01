@@ -1,0 +1,11 @@
+{
+  "command": "dotnet test Tests/Exchange.Tests.csproj --filter FullyQualifiedName~ExchangeClientStartInfoTests --logger console;verbosity=normal --logger trx;LogFileName=01-01-red.trx --results-directory .planning/tmp/01-01-red",
+  "reportPath": ".planning/tmp/01-01-red/01-01-red.trx",
+  "actual": "All four cases fail assertion because pure resolver/builder methods are absent",
+  "output": "TAP version 13\n1..4\nnot ok 1 - Exchange.Tests.ExchangeClientStartInfoTests.BuildClientStartInfo_PreservesOrderedArguments(scenario: 0)\n  ---\n  message: The pure client start-info boundary must exist.\n  ...\nnot ok 2 - Exchange.Tests.ExchangeClientStartInfoTests.BuildClientStartInfo_PreservesOrderedArguments(scenario: 2)\n  ---\n  message: The pure client start-info boundary must exist.\n  ...\nnot ok 3 - Exchange.Tests.ExchangeClientStartInfoTests.BuildClientStartInfo_PreservesOrderedArguments(scenario: 3)\n  ---\n  message: The pure client start-info boundary must exist.\n  ...\nnot ok 4 - Exchange.Tests.ExchangeClientStartInfoTests.BuildClientStartInfo_PreservesOrderedArguments(scenario: 1)\n  ---\n  message: The pure client start-info boundary must exist.\n  ...",
+  "targetTest": "Exchange.Tests.ExchangeClientStartInfoTests.BuildClientStartInfo_PreservesOrderedArguments(scenario: 0)",
+  "semanticAssessment": "Four targeted theory cases executed; each failed Assert.True for missing pure methods, no fixture/build failure. TAP adapter translates actual TRX result rows and messages without synthesizing results.",
+  "targetFile": "Tests/ExchangeClientStartInfoTests.cs",
+  "exitCode": 1,
+  "expected": "Pure start-info builder resolves paths and preserves four ordered arguments"
+}

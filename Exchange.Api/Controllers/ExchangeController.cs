@@ -16,6 +16,11 @@ namespace Exchange.Api.Controllers
         ILogger<ExchangeController> logger) : ControllerBase
     {
         [HttpPost]
+        [ProducesResponseType(typeof(LaunchResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status503ServiceUnavailable)]
         public ActionResult<LaunchResponse> Launch([FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] LaunchRequest? request)
         {
             if (!string.IsNullOrWhiteSpace(request?.ExchangeProcessFileName))

@@ -5,6 +5,7 @@ using Exchange.Configuration;
 
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.OpenApi;
 
 namespace Exchange.Api
 {
@@ -18,6 +19,21 @@ namespace Exchange.Api
                 ApplicationName = typeof(ApiApplication).Assembly.FullName
             });
             builder.Services.AddControllers().AddApplicationPart(typeof(ApiApplication).Assembly);
+            builder.Services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "Exchange Admin API", Version = "v1" });
+                options.AddSecurityDefinition(ApiKeyAuthenticationHandler.SchemeName, new OpenApiSecurityScheme
+                {
+                    Type = SecuritySchemeType.ApiKey,
+                    In = ParameterLocation.Header,
+                    Name = "X-Api-Key",
+                    Description = "Enter the configured API key."
+                });
+                options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
+                {
+                    [new OpenApiSecuritySchemeReference(ApiKeyAuthenticationHandler.SchemeName, document)] = []
+                });
+            });
             builder.Services.Configure<ApiBehaviorOptions>(o => o.InvalidModelStateResponseFactory = _ =>
                 new BadRequestObjectResult(new ProblemDetails { Status = 400, Title = "Invalid request", Extensions = { ["code"] = "invalid_request" } }));
             builder.Services.AddAuthentication(ApiKeyAuthenticationHandler.SchemeName)
@@ -44,6 +60,12 @@ namespace Exchange.Api
             }
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
+            {
+                options.RoutePrefix = string.Empty;
+                options.SwaggerEndpoint("./swagger/v1/swagger.json", "Exchange Admin API v1");
+            });
             app.MapControllers();
             return app;
         }
