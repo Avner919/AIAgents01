@@ -1,0 +1,23 @@
+{
+  "contract": "1.0.0",
+  "flavor": "core",
+  "milestone": null,
+  "phases": [
+    {
+      "number": "1",
+      "name": "Authenticated Default Launch",
+      "status": "in_progress"
+    },
+    {
+      "number": "2",
+      "name": "Explicit Client Selection and Compatibility",
+      "status": "pending"
+    }
+  ],
+  "next": {
+    "command": "$gsd-progress --next",
+    "label": "Advance to the next step (plan phase 01)",
+    "reason": "Phase 1 of 2 — needs a plan"
+  },
+  "updated_at": "2026-10-31T08:40:06.272Z"
+}

@@ -1,0 +1,5 @@
+No external API integration: Phase 01 builds this repository's own authenticated HTTP endpoint and launches an operator-configured local Windows utility through System.Diagnostics.Process; it does not consume an external service API or SDK capability surface.
+
+The existing external exchange client remains behind the unchanged console protocol. This phase proves API admission and immediate process creation using isolated substitutes. No unrelated external API capabilities are added. The API-coverage detector is run against final plans plus the phase roadmap section; this declaration handles any broad lexical detection of the local API/process integration.
+
+Active plan:pre contributions are applied: current RESEARCH.md/PATTERNS.md are consumed; each plan has an ASVS L1 threat register with high blocking threshold; assumption-delta records no-change per-launch PID identity in 01-03; schema scan has no ORM/schema paths and requires no database push. The phase contains no AI-system or frontend feature requiring AI-SPEC/UI-SPEC. Drift/UI gates remain orchestrator checks, not new product scope.

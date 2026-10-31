@@ -12,6 +12,7 @@ The Exchange Admin API milestone delivers two usable vertical slices: an API-key
 ## Phase Details
 
 ### Phase 1: Authenticated Default Launch
+
 **Goal:** An authorized operator can start the separate exchange utility using existing defaults, receive its PID and non-secret effective settings or a useful launch error, and submit another request while the first utility is running.
 **Mode:** mvp
 **Depends on:** Nothing (first phase)
@@ -22,13 +23,23 @@ The Exchange Admin API milestone delivers two usable vertical slices: an API-key
   3. Omitted, null, empty, and whitespace-only executable input all use the same defaults retained in `ExchangeProcess`, with API resolution and console execution agreeing on the effective values.
   4. Successful default-launch responses contain the utility PID and effective client filename, full executable path, client working directory, input/output directories, and timeout in milliseconds, without credentials or API keys. The response can complete while the utility is still running; the PID acknowledges process creation only.
   5. Two valid overlapping default-launch requests can each receive an immediate utility PID without rejection, queueing, or serialization solely because another exchange is running. Invalid executable paths applicable to this slice and immediate process-start failures return useful errors without secrets or successful PID responses. Admission does not promise independent concurrent external exchanges.
-**Plans:** TBD
+
+**Plans:** 0/3 plans executed
+**Wave 1**
+- [ ] 01-01-PLAN.md
+
+**Wave 2** *(blocked on Wave 1 completion)*
+- [ ] 01-02-PLAN.md
+
+**Wave 3** *(blocked on Wave 2 completion)*
+- [ ] 01-03-PLAN.md
 
 **Verification:** Use isolated HTTP tests with substitute launchers to prove authentication precedes side effects, all blank variants resolve consistently, safe response fields match effective configuration, and response completion does not depend on child completion. Keep the first test launch active while submitting a second and verify both return PIDs. Cover invalid applicable paths and immediate start failures, with no success PID or secrets in errors. Verify the console/default resolution contract without invoking real exchange or installed-client cleanup. Check configuration and default-launch examples against the implemented contract. Run `dotnet test AIPractice1.slnx` after code changes, following the repository test skill.
 
 **Discussion before planning:** Settle endpoint/header/configuration names, response and error shapes, utility deployment/configuration working directory, and shared resolution/configuration boundaries so reported defaults match execution. Review broad cleanup and fixed named events before wiring launches; record concurrency limits with this slice. Overlapping admission must be verified in Phase 1. Do not introduce single-flight rejection or queueing or claim concurrent exchange isolation.
 
 ### Phase 2: Explicit Client Selection and Compatibility
+
 **Goal:** An authorized operator can select a full external-client executable path with consistent startup and cleanup, while existing console invocation and the Phase 1 launch contract remain supported and fully documented.
 **Mode:** mvp
 **Depends on:** Phase 1
@@ -39,6 +50,7 @@ The Exchange Admin API milestone delivers two usable vertical slices: an API-key
   3. Existing default console invocation still works, and default and selected-client startup/cleanup follow a consistent lifecycle rather than continuing to assume the original hardcoded client name for overrides.
   4. Invalid executable paths and immediate process-start failures produce useful errors without secrets; launch failures never masquerade as successful PID responses.
   5. Operators can follow configuration instructions and default/explicit-path request and response examples; isolated automated checks demonstrate authentication, defaults, overrides, immediate responses, overlapping admission, cleanup compatibility, and launch failures.
+
 **Plans:** TBD
 
 **Verification:** Exercise the real HTTP/authentication pipeline with test-owned substitutes; assert full paths survive the chosen child transport, working directories/configuration stay coherent, overlap has no admission lock, and controlled lifecycle failures clean up the selected test client consistently. Use test-owned processes only where needed for OS launch/PID behavior; never run real exchange or terminate installed clients. Complete `dotnet test AIPractice1.slnx` under the repository test skill. Documentation must distinguish process creation from exchange success and state verified concurrency limits.
@@ -55,7 +67,7 @@ Execution order: Phase 1 → Phase 2. Plans within a phase may run in parallel o
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Authenticated Default Launch | 0/TBD | Not started | - |
+| 1. Authenticated Default Launch | 0/3 | Planned     | - |
 | 2. Explicit Client Selection and Compatibility | 0/TBD | Not started | - |
 
 ---
