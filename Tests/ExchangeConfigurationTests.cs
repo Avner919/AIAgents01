@@ -9,6 +9,30 @@ namespace Exchange.Tests
 {
     public class ExchangeConfigurationTests
     {
+        [Theory]
+        [InlineData("")]
+        [InlineData("   ")]
+        [InlineData(null)]
+        public void BlankExchangeDirectories_RemainEmptyInChildAndArguments(string? value)
+        {
+            using var deployment = new UtilityDeploymentFixture();
+            File.WriteAllText(Path.Combine(deployment.DirectoryPath, "appsettings.json"),
+                JsonSerializer.Serialize(new { Exchange = new { InFilePath = value, OutFilePath = value } }));
+            var environment = deployment.EnvironmentValues();
+            var settings = ExchangeProcess.ResolveDefaults(ExchangeConfigurationLoader.Load(deployment.DirectoryPath, environment), deployment.DirectoryPath);
+            var startInfo = ExchangeProcess.BuildClientStartInfo(settings);
+            Assert.Equal(string.Empty, settings.InputDirectory);
+            Assert.Equal(string.Empty, settings.OutputDirectory);
+            Assert.Equal(4, startInfo.ArgumentList.Count);
+            Assert.Equal(string.Empty, startInfo.ArgumentList[2]);
+            Assert.Equal(string.Empty, startInfo.ArgumentList[3]);
+
+            var childEnvironment = settings.CreateChildEnvironment(environment);
+            var childSettings = ExchangeProcess.ResolveDefaults(ExchangeConfigurationLoader.Load(deployment.DirectoryPath, childEnvironment), deployment.DirectoryPath);
+            Assert.Equal(string.Empty, childSettings.InputDirectory);
+            Assert.Equal(string.Empty, childSettings.OutputDirectory);
+        }
+
         [Fact]
         public void SharedDefaults_UseUtilityFolderAndEnvironment()
         {

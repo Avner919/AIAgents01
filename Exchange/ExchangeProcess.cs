@@ -24,7 +24,6 @@ namespace Exchange
         {
             ArgumentNullException.ThrowIfNull(options);
             if (options.Agent == null || string.IsNullOrWhiteSpace(options.AgentCatalog)
-                || string.IsNullOrWhiteSpace(options.InFilePath) || string.IsNullOrWhiteSpace(options.OutFilePath)
                 || options.Agent.Login == null || options.Agent.Password == null || options.Agent.Timeout < -1)
             {
                 throw new InvalidOperationException("Exchange configuration is invalid.");
@@ -32,8 +31,13 @@ namespace Exchange
             var root = Path.GetFullPath(utilityDirectory);
             var clientDirectory = Path.GetFullPath(options.AgentCatalog, root);
             return new ResolvedExchangeSettings(ExchangeProcessFileName, Path.Combine(clientDirectory, ExchangeProcessFileName),
-                clientDirectory, Path.GetFullPath(options.InFilePath, root), Path.GetFullPath(options.OutFilePath, root),
+                clientDirectory, ResolveExchangeDirectory(options.InFilePath, root), ResolveExchangeDirectory(options.OutFilePath, root),
                 options.Agent.Timeout, options.Agent.Login, options.Agent.Password);
+        }
+
+        private static string ResolveExchangeDirectory(string path, string utilityDirectory)
+        {
+            return string.IsNullOrWhiteSpace(path) ? string.Empty : Path.GetFullPath(path, utilityDirectory);
         }
 
         public static ProcessStartInfo BuildClientStartInfo(ResolvedExchangeSettings settings)
